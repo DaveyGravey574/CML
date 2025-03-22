@@ -1,0 +1,15 @@
+---
+- name: Deploy lab to CML
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Create lab from YAML
+      cisco.cml.cml_lab:
+        host: "192.168.1.251"
+        user: "{{ lookup('env', 'CML_USERNAME') }}"
+        password: "{{ lookup('env', 'CML_PASSWORD') }}"
+        validate_certs: false
+        lab: "Test2"
+        file: "../labs/new_lab.yml"
+        state: started

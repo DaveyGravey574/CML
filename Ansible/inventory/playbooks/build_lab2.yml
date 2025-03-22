@@ -1,0 +1,39 @@
+---
+- name: Build the topology
+  hosts: localhost
+  gather_facts: false
+  tags:
+    - virl
+    - network
+  tasks:
+    - name: Check for the lab file
+      ansible.builtin.stat:
+        path: "../labs/new_lab.yml"
+      register: stat_result
+      delegate_to: localhost
+      run_once: true
+
+    - name: Ensure credentials are populated
+      ansible.builtin.assert:
+        that:
+          - stat_result.stat.exists
+          - cml_host != ""
+          - cml_username != ""
+          - cml_password != ""
+          - cml_lab != ""
+        msg: "CML host, credentials, and topology file are required.  Verify the requirements in README are met."
+      delegate_to: localhost
+      # run_once: true
+
+    - name: Create the lab
+      cisco.cml.cml_lab:
+        host: "192.168.1.251"
+        user: "david"
+        password: "Cra6uch6"
+        lab: "New Lab"
+        state: present
+        file: "../labs/new_lab.yml"
+      register: results
+
+    - name: Refresh Inventory
+      ansible.builtin.meta: refresh_inventory

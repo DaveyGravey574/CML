@@ -1,0 +1,7 @@
+---
+plugin: cisco.cml.cml_inventory
+host: "{{ lookup('env', 'CML_HOST') }}"
+username: "{{ lookup('env', 'CML_USERNAME') }}"
+password: "{{ lookup('env', 'CML_PASSWORD') }}"
+validate_certs: "no"
+#lab: "Test"
